@@ -23,6 +23,8 @@ class Task:
 class TaskManager:
     def __init__(self):
         self.tasks = []
+        self.completed_tasks = []  # Добавленный атрибут для хранения выполненных задач
+
     # Создает новую задачу и добавляет ее в список задач
     def add_task(self, description, deadline):
         task = Task(description, deadline)
@@ -35,18 +37,27 @@ class TaskManager:
     # Отмечает задачу выполненной
     def mark_task_done(self, task_index):
         if 0 <= task_index < len(self.tasks):
-            self.tasks[task_index].status = True
+            task = self.tasks.pop(task_index)
+            task.status = True
+            self.completed_tasks.append(task)  # Добавляем задачу в список выполненных задач
 
     # Выводит список текущих (не выполненных) задач
     def list_current_tasks(self):
-        current_tasks = [task for task in self.tasks if not task.status]
-        for idx, task in enumerate(current_tasks):
+        for idx, task in enumerate(self.tasks):
+            print(f"{idx + 1}. {task}")
+
+    # Выводит список выполненных задач
+    def list_completed_tasks(self):
+        for idx, task in enumerate(self.completed_tasks):
             print(f"{idx + 1}. {task}")
 
     # Выводит список всех задач (выполненных и невыполненных).
     def list_all_tasks(self):
-        for idx, task in enumerate(self.tasks):
-            print(f"{idx + 1}. {task}")
+        print("Текущие задачи:")
+        self.list_current_tasks()
+        print("\nВыполненные задачи:")
+        self.list_completed_tasks()
+
 
 # Создаем менеджер задач и добавляем задачи
 task_manager = TaskManager()
@@ -59,8 +70,8 @@ task_manager.add_task("День рождения у племянника", "20.1
 task_manager.add_task("Уезжаю в отпуск", "20.08.2024")
 
 # Отмечаем некоторые задачи выполненными
-task_manager.mark_task_done(1)  # Отметить вторую задачу выполненной
-task_manager.mark_task_done(3)  # Отметить четвертую задачу выполненной
+task_manager.mark_task_done(0)  # Отметить вторую задачу выполненной
+task_manager.mark_task_done(1)  # Отметить четвертую задачу выполненной
 
 # Выводим список всех задач
 print("Список всех задач:")
@@ -69,3 +80,7 @@ task_manager.list_all_tasks()
 # Выводим список текущих (не выполненных) задач
 print("\nТекущие задачи:")
 task_manager.list_current_tasks()
+
+# Выводим список выполненных задач
+print("\nВыполненные задачи:")
+task_manager.list_completed_tasks()
